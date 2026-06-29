@@ -1,5 +1,4 @@
-
-    module.exports = async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -21,23 +20,10 @@
       }
     );
     const data = await response.json();
-    
-    if (!data.candidates || !data.candidates[0]) {
-      return res.status(200).json({ 
-        score: 50, debug: JSON.stringify(data)
-      });
-    }
-    
     const text = data.candidates[0].content.parts[0].text;
-    // デバッグ：テキストをそのまま返す
-    return res.status(200).json({ 
-      score: 50, 
-      debug_text: text,
-      debug_raw: text.substring(0, 500)
-    });
-    
+    console.log('GEMINI:', text.substring(0, 300));
+    res.status(200).json({ raw: text });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-    }
-    
+}
