@@ -1,4 +1,5 @@
-module.exports = async function handler(req, res) {
+
+    module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -22,18 +23,21 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
     
     if (!data.candidates || !data.candidates[0]) {
-      return res.status(500).json({ error: 'Gemini response empty', raw: JSON.stringify(data) });
+      return res.status(200).json({ 
+        score: 50, debug: JSON.stringify(data)
+      });
     }
     
     const text = data.candidates[0].content.parts[0].text;
-    const clean = text.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
+    // デバッグ：テキストをそのまま返す
+    return res.status(200).json({ 
+      score: 50, 
+      debug_text: text,
+      debug_raw: text.substring(0, 500)
+    });
     
-    // 全フィールドをそのまま返す
-    res.status(200).json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-}
-    
+    }
     
