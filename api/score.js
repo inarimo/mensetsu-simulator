@@ -20,10 +20,10 @@ module.exports = async function handler(req, res) {
       }
     );
     const data = await response.json();
-    const text = data.candidates[0].content.parts[0].text;
-    console.log('GEMINI:', text.substring(0, 300));
-    res.status(200).json({ raw: text });
+    console.log('FULL RESPONSE:', JSON.stringify(data).substring(0, 500));
+    res.status(200).json({ debug: JSON.stringify(data).substring(0, 500) });
   } catch (e) {
+    console.log('ERROR:', e.message);
     res.status(500).json({ error: e.message });
   }
 }
