@@ -21,7 +21,6 @@ module.exports = async function handler(req, res) {
     );
     const data = await response.json();
     
-    // エラーチェック
     if (!data.candidates || !data.candidates[0]) {
       return res.status(500).json({ error: 'Gemini response empty', raw: JSON.stringify(data) });
     }
@@ -29,8 +28,12 @@ module.exports = async function handler(req, res) {
     const text = data.candidates[0].content.parts[0].text;
     const clean = text.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
+    
+    // 全フィールドをそのまま返す
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 }
+    
+    
